@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate-key="pageTitle">ZG FILM CRAFT - المونتاج السينمائي الاحترافي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00AFFF;
+            --primary-hover: #008fcc;
+            --bg-gradient-start: #89f7fe;
+            --bg-gradient-end: #66a6ff;
+            --secondary-color: #6c757d;
+            --text-color: #1a1a1a;
+            --text-color-light: #f0f0f0;
+            --text-muted-color: #555;
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: rgba(0, 0, 0, 0.12);
+            --body-bg: #f8f9fa;
+            --border-radius: 16px;
+            --transition-speed: 0.3s;
+        }
+
+        body.dark-mode {
+            --bg-gradient-start: #1a1c20;
+            --bg-gradient-end: #2d3436;
+            --text-color: #f1f2f6;
+            --text-color-light: #2f3542;
+            --text-muted-color: #a4b0be;
+            --glass-bg: rgba(18, 22, 28, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: rgba(0, 0, 0, 0.45);
+            --body-bg: #0f1115;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', 'Roboto', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            transition: background-color 0.5s, color 0.5s;
+            line-height: 1.8;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        html[lang="zh"] body { font-family: 'Roboto', 'Cairo', sans-serif; }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end), var(--primary-color));
+            background-size: 400% 400%;
+            animation: gradientBG 16s ease infinite;
+            transition: background 0.5s;
+        }
+
+        body.animation-disabled .background-animation {
+            animation: none;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 20px auto;
+            padding: 20px;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 var(--glass-shadow);
+            transition: background 0.4s, border 0.4s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-controls {
+            padding: 15px 22px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 15px;
+            z-index: 1000;
+        }
+
+        .logo-placeholder {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-placeholder img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .brand-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text-color);
+        }
+
+        .controls-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .language-switcher {
+            display: flex;
+            background: rgba(0,0,0,0.08);
+            border-radius: 30px;
+            padding: 4px;
+        }
+
+        .language-switcher button {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .language-switcher button.active {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 175, 255, 0.4);
+        }
+
+        .control-btn {
+            background: rgba(0,0,0,0.06);
+            border: 1px solid transparent;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .control-btn:hover {
+            background-color: rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle .fa-moon { display: none; }
+        .dark-mode .theme-toggle .fa-sun { display: none; }
+        .dark-mode .theme-toggle .fa-moon { display: inline-block; }
+
+        /* Main App Header Card */
+        .app-card {
+            padding: 35px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .app-logo img {
+            width: 140px;
+            height: 140px;
+            border-radius: 28px;
+            object-fit: cover;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            background: #111;
+        }
+
+        .app-details {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .app-title-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .app-title {
+            font-size: 2.7rem;
+            font-weight: 900;
+            color: var(--text-color);
+            line-height: 1.1;
+        }
+
+        .system-badge {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .app-short-desc {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            line-height: 1.7;
+        }
+
+        .badge-notice {
+            background-color: rgba(0, 175, 255, 0.12);
+            border-right: 4px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        html[dir="ltr"] .badge-notice {
+            border-right: none;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .download-area {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .download-btn {
+            position: relative;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn-windows {
+            background: linear-gradient(45deg, #0078d4, #005a9e);
+        }
+
+        .download-btn-mac {
+            background: linear-gradient(45deg, #2d3436, #000000);
+        }
+
+        .download-btn-linux {
+            background: linear-gradient(45deg, #e95420, #b83b10);
+        }
+
+        .download-btn-deb {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            padding: 12px 22px;
+            font-size: 0.95rem;
+        }
+
+        .download-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background-color: rgba(255, 255, 255, 0.35);
+            border-radius: 50px;
+            transition: width 2s ease-out;
+        }
+
+        .download-btn.downloading .download-progress {
+            width: 100%;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 22px;
+            padding-bottom: 6px;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+        }
+
+        /* Screenshots Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 6px 20px var(--glass-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #000;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(0, 175, 255, 0.35);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            background: var(--glass-bg);
+            color: var(--text-color);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Description Cards */
+        .description-card {
+            padding: 35px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .feature-box {
+            background: rgba(0,0,0,0.04);
+            border: 1px solid var(--glass-border);
+            padding: 22px;
+            border-radius: 14px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        body.dark-mode .feature-box {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-4px);
+            background: rgba(0, 175, 255, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .feature-box h4 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .feature-box p {
+            font-size: 0.98rem;
+            opacity: 0.88;
+            line-height: 1.6;
+        }
+
+        .spec-table-container {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        .spec-table th, .spec-table td {
+            padding: 12px 18px;
+            text-align: right;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        html[dir="ltr"] .spec-table th, html[dir="ltr"] .spec-table td {
+            text-align: left;
+        }
+
+        .spec-table th {
+            background: rgba(0,0,0,0.07);
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 25px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 40px var(--glass-shadow);
+            width: 100%;
+            max-width: 800px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.6rem;
+        }
+
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-muted-color);
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            transform: scale(1.2);
+            color: var(--primary-color);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 10px;
+            padding-left: 5px;
+        }
+
+        html[dir="rtl"] .modal-body {
+            padding-left: 10px;
+            padding-right: 5px;
+        }
+
+        .modal-body::-webkit-scrollbar { width: 7px; }
+        .modal-body::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+            text-align: right;
+        }
+
+        html[dir="rtl"] .modal-footer { text-align: left; }
+
+        .btn {
+            padding: 10px 22px;
+            font-weight: bold;
+            color: #fff;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .btn.btn-secondary { background-color: var(--secondary-color); }
+        .btn.btn-danger { background-color: #dc3545; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Services List */
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-link {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 14px 20px;
+            background: rgba(0,0,0,0.06);
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all var(--transition-speed);
+            font-weight: bold;
+        }
+
+        .service-link:hover {
+            background-color: rgba(0, 175, 255, 0.15);
+            transform: translateX(-6px);
+            color: var(--primary-color);
+        }
+
+        html[dir="ltr"] .service-link:hover {
+            transform: translateX(6px);
+        }
+
+        .service-link i {
+            font-size: 1.4rem;
+            width: 25px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        /* Image Lightbox */
+        #image-modal-overlay { padding: 15px; }
+        .image-modal-content {
+            padding: 10px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            max-width: 92vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #image-modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 2010;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        #modal-image {
+            width: 100%;
+            height: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        /* Developer About Card */
+        #about-modal-body { text-align: center; }
+        #about-modal-body .profile-pic {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+        #about-modal-body h3 { color: var(--primary-color); font-size: 1.6rem; margin-bottom: 5px; }
+        #about-modal-body h4 { font-size: 1.15rem; color: var(--text-muted-color); margin-bottom: 20px; }
+        #about-modal-body .info-section, #privacy-modal-body .info-section {
+            margin: 20px 0;
+            background: var(--glass-bg);
+            padding: 18px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            text-align: initial;
+        }
+        #about-modal-body .info-section h5 {
+            font-size: 1.05rem;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .certs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            margin-top: 15px;
+        }
+        .certs-grid img {
+            max-height: 55px;
+            width: auto;
+            opacity: 0.85;
+            transition: all 0.3s;
+        }
+        .certs-grid img:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .social-card {
+            max-width: 260px;
+            margin: 20px auto 0 auto;
+            text-align: center;
+        }
+        .socialbar {
+            background-color: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 3em;
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 12px;
+        }
+        .socialbar a {
+            color: var(--text-muted-color);
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .socialbar a svg { width: 18px; height: 18px; }
+        #facebook:hover { color: #1877f2; }
+        #instagram:hover { color: #e4405f; }
+        #whatsapp:hover { color: #25d366; }
+        #telegram:hover { color: #0088cc; }
+        #youtube:hover { color: #ff0000; }
+
+        /* Settings Modal */
+        .settings-section {
+            margin-bottom: 20px;
+            padding: 18px;
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+        }
+        .settings-section h4 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 8px;
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .setting-item input[type="color"] {
+            border: none;
+            background: transparent;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .app-footer {
+            padding: 25px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-muted-color);
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 40px;
+        }
+        .app-footer a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color var(--transition-speed);
+        }
+        .app-footer a:hover { color: var(--primary-color); }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <div class="background-animation"></div>
+
+    <div class="container">
+        <!-- GLOBAL HEADER -->
+        <header class="header-controls glass-card">
+            <a href="https://www.zg-ziad-gamal.com/" class="logo-placeholder" target="_blank" rel="noopener noreferrer">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-aVZFRjk4HrZ0uxnAdrcqGTSfD8UaCJhwUOjlrjVr98c-bVpy1wGet-_9t-I8uDY0J1BCOX0le-ThOC5BiMHEUpnLrxC3jL0bol6-F_WnwjVJcAfdJx0aaA0TTXfkcWJ9W0eYPA8V_UYzJ-kFKQVcNNESJdCOriEjwkUzWUr58RCQQ7Dc7QkQgKHWBwXY/s512/ZG_Icon_512x512.png" alt="ZG Logo">
+                <span class="brand-text">ZG FILM CRAFT</span>
+            </a>
+            <div class="controls-container">
+                <div class="language-switcher">
+                    <button id="lang-ar" class="active">AR</button>
+                    <button id="lang-en">EN</button>
+                    <button id="lang-zh">ZH</button>
+                </div>
+                <button id="services-toggle-btn" class="control-btn" title="ZG Services">
+                    <i class="fas fa-layer-group"></i>
+                </button>
+                <button id="about-toggle-btn" class="control-btn" title="About Developer">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+                <button id="privacy-toggle-btn" class="control-btn" title="Privacy Policy">
+                    <i class="fas fa-shield-halved"></i>
+                </button>
+                <button id="settings-toggle-btn" class="control-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="control-btn theme-toggle" id="theme-toggle-btn" title="Toggle Theme">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- APP HERO SECTION -->
+            <section class="app-card glass-card">
+                <div class="app-logo">
+                    <img src="https://getartcraft.com/images/apps/filmcraft/icon.webp" alt="ZG FILM CRAFT Icon">
+                </div>
+                <div class="app-details">
+                    <div class="app-title-container">
+                        <h1 class="app-title" data-translate-key="appName">ZG FILM CRAFT</h1>
+                        <span class="system-badge">Pro NLE Studio</span>
+                    </div>
+                    <p class="app-short-desc" data-translate-key="shortDescription">
+                        برنامج المونتاج وتحرير الفيديو السينمائي الفائق. استمتع بأقوى شاشات العرض المزدوجة، تايم لاين حقيقي متعدد المسارات، كافة أدوات القص والتعديل الديناميكي، ومحرك تصحيح ألوان احترافي مبني بالكامل بأحدث تقنيات المعالجة دون أي تسريب للذاكرة.
+                    </p>
+                    <div class="badge-notice">
+                        <i class="fas fa-bolt"></i>
+                        <span data-translate-key="badge_note">أداء فائق واستقرار مطلق مع معالجة رسومية مباشرة على كارت الشاشة (GPU Live Pipeline).</span>
+                    </div>
+                    
+                    <div class="download-area">
+                        <!-- Windows Download -->
+                        <a href="https://drive.google.com/file/d/18cjpCW0DlqkqPT5gZAajLocH22_i3xPT/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="download-btn download-btn-windows">
+                            <i class="fab fa-windows"></i>
+                            <span data-translate-key="btn_win">تحميل للويندوز (MSI - 64bit)</span>
+                            <div class="download-progress"></div>
+                        </a>
+                        <!-- macOS Download -->
+                        <a href="https://drive.google.com/file/d/1RzUeHoUJhQVI5FooJ2Bnveu2BRIUJPFD/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="download-btn download-btn-mac">
+                            <i class="fab fa-apple"></i>
+                            <span data-translate-key="btn_mac">تحميل للماك (Universal DMG)</span>
+                            <div class="download-progress"></div>
+                        </a>
+                        <!-- Linux Download -->
+                        <a href="https://drive.google.com/file/d/1y77EF9hMSFsqXxnPSStDgkDi9-eCUvPg/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="download-btn download-btn-linux">
+                            <i class="fab fa-linux"></i>
+                            <span data-translate-key="btn_linux">تحميل للينكس (AppImage)</span>
+                            <div class="download-progress"></div>
+                        </a>
+                        <!-- Linux DEB -->
+                        <a href="https://drive.google.com/file/d/1y77EF9hMSFsqXxnPSStDgkDi9-eCUvPg/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="download-btn download-btn-deb">
+                            <i class="fas fa-box-open"></i>
+                            <span data-translate-key="btn_deb">حزمة دبيان (.deb)</span>
+                            <div class="download-progress"></div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREENSHOTS SECTION -->
+            <section class="section">
+                <h2 class="section-title" data-translate-key="screenshotsTitle">لقطات الشاشة الرسمية</h2>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="https://getartcraft.com/images/apps/filmcraft/hero.webp" alt="ZG FILM CRAFT Timeline & Multi-track">
+                        <div class="gallery-caption" data-translate-key="cap_1">واجهة المونتاج والتايم لاين متعدد المسارات</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://getartcraft.com/images/apps/filmcraft/color.webp" alt="ZG FILM CRAFT Scopes and Color Grading">
+                        <div class="gallery-caption" data-translate-key="cap_2">مخططات الإشارة الحية والتدريج اللوني السينمائي (Scopes)</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://getartcraft.com/images/apps/filmcraft/keyframes.webp" alt="ZG FILM CRAFT Keyframes with Velocity Graphs">
+                        <div class="gallery-caption" data-translate-key="cap_3">محرر المنحنيات ومخطط السرعة للإطارات المفتاحية</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://getartcraft.com/images/apps/filmcraft/export.webp" alt="ZG FILM CRAFT Export & Destination Presets">
+                        <div class="gallery-caption" data-translate-key="cap_4">محرك التصدير وضبط الإعدادات الاحترافية المسبقة</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DETAILED FEATURES SECTION -->
+            <section class="section">
+                <div class="description-card glass-card">
+                    <h2 class="section-title" data-translate-key="descriptionTitle">المواصفات والإمكانيات التقنية</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-box">
+                            <i class="fas fa-layer-group feature-icon"></i>
+                            <h4 data-translate-key="feat_1_title">تايم لاين سينمائي معتاد</h4>
+                            <p data-translate-key="feat_1_desc">شاشات مراقبة المصدر والبرنامج، تحرير ثلاثي النقاط (3-Point Editing)، دعم كامل لجميع أوضاع القص (Ripple, Roll, Slip, Slide) واختصارات J/K/L الديناميكية السلسة.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-clock feature-icon"></i>
+                            <h4 data-translate-key="feat_2_title">توقيت رياضي فائق الدقة</h4>
+                            <p data-translate-key="feat_2_desc">نظام زمني مبني على دقة 2.54×10⁸ هرتز، مما يضمن دقة الفريمات لسرعات 23.976 و 29.97 مع تجنب انزياح الصوت أو فقدان الفريمات حتى في المشاريع الضخمة.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-microchip feature-icon"></i>
+                            <h4 data-translate-key="feat_3_title">محرك كوديك مخصص</h4>
+                            <p data-translate-key="feat_3_desc">معالجة برمجية أصلية لفك وتشفير H.264 و HEVC و Apple ProRes و VP9 و AAC و Opus بالاعتماد التام على العتاد المسرع وكروت الشاشة.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-palette feature-icon"></i>
+                            <h4 data-translate-key="feat_4_title">تدريج لوني ومخططات 60 FPS</h4>
+                            <p data-translate-key="feat_4_desc">منحنيات الألوان RGB، عجلات التلوين (Lift, Gamma, Gain)، تدريج HSL، دعم كامل لملفات 3D LUT ومسارات HDR & Log، مع مخططات Waveform و Vectorscope لحظية.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-bezier-curve feature-icon"></i>
+                            <h4 data-translate-key="feat_5_title">مؤثرات ومنحنيات حركة</h4>
+                            <p data-translate-key="feat_5_desc">أكثر من 55 تأثيراً و30 انتقالاً سلساً، مع محرر إطارات مفتاحية يتيح التحكم في منحنيات القيمة والسرعة (Value & Velocity Graphs) في بيئة ضوئية خطية Linear Light.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-volume-high feature-icon"></i>
+                            <h4 data-translate-key="feat_6_title">هندسة صوت للبث التلفزيوني</h4>
+                            <p data-translate-key="feat_6_desc">مقياس متوافق مع معايير البث العالمية EBU R128، ماكسر صوتي مدمج يدعم الأتمتة (Automation)، ومؤثرات DSP صوتية فورية فائقة النقاء.</p>
+                        </div>
+                    </div>
+
+                    <div class="spec-table-container">
+                        <table class="spec-table">
+                            <thead>
+                                <tr>
+                                    <th data-translate-key="th_feature">الميزة</th>
+                                    <th data-translate-key="th_zg">ZG FILM CRAFT</th>
+                                    <th data-translate-key="th_legacy">البرامج التقليدية الأخرى</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-translate-key="td_stability">استقرار الذاكرة</td>
+                                    <td data-translate-key="td_stability_zg">إدارة ذاكرة صارمة، بدون أي تسريب (Zero Memory Leaks)</td>
+                                    <td data-translate-key="td_stability_leg">انهيارات متكررة عند استهلاك الرام مع جودات 4K/8K</td>
+                                </tr>
+                                <tr>
+                                    <td data-translate-key="td_scopes">سرعة المخططات التلوينية</td>
+                                    <td data-translate-key="td_scopes_zg">معالجة حية 60 FPS عبر الـ GPU بدون هبوط في الإطارات</td>
+                                    <td data-translate-key="td_scopes_leg">هبوط في الفريمات وثقل ملحوظ في التايم لاين</td>
+                                </tr>
+                                <tr>
+                                    <td data-translate-key="td_codecs">دعم الكوديك</td>
+                                    <td data-translate-key="td_codecs_zg">دعم عتادي مدمج فوري (ProRes, H.264, HEVC, AV1)</td>
+                                    <td data-translate-key="td_codecs_leg">حزم خارجية وإضافات مكلفة ومدفوعة</td>
+                                </tr>
+                                <tr>
+                                    <td data-translate-key="td_license">الترخيص والتكلفة</td>
+                                    <td data-translate-key="td_license_zg">مجاني تماماً وحصري عبر خوادم ZG SERVER</td>
+                                    <td data-translate-key="td_license_leg">اشتراكات شهرية باهظة ومكلفة للمبدعين</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="app-footer">
+        <a href="https://www.zg-ziad-gamal.com/" target="_blank" rel="noopener noreferrer">
+            All Right Reserved Copyright © ZG ZIAD GAMAL
+        </a>
+        <p data-translate-key="powered_by" style="margin-top: 8px;">يعمل بواسطة ZG SERVER</p>
+    </footer>
+
+    <!-- MODAL: ABOUT DEVELOPER -->
+    <div id="about-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-translate-key="about_modal_title">حول المطور</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div id="about-modal-body" class="modal-body">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiY8msPmxWaVYd-R35MDAS-7GnZhFFVjdU9SGXu2Ip53tU_LW7FYAvbaN7wQLj3tgTUuPIpxrXTfj1xkhe0rMk8EKzd5lqD419nvrj7R3TGlu0gTngDS3YUzHWDR3WB_djZkj1X635zwlkTw51ygun3-7h9UeMHiuvk1-GQ0djow_ViDR11lqn2x3K33xK8/s320/502463702_2856417251209619_8434838307459497445_n.jpg" alt="Ziad Gamal" class="profile-pic">
+                <h3 data-translate-key="about_name">زياد جمال شوقي محمد محمد يوسف</h3>
+                <h4 data-translate-key="about_dob">تاريخ الميلاد: 23/1/2003</h4>
+                
+                <div class="info-section">
+                    <h5 data-translate-key="about_skills_title">القدرات والخبرات البرمجية</h5>
+                    <p data-translate-key="about_skill_1">إنشاء وتطوير مواقع الويب المتقدمة والأنظمة السحابية.</p>
+                    <p data-translate-key="about_skill_2">إنتاج فيديوهات موشن جرافيك احترافية مع تعليق صوتي بلهجات متعددة.</p>
+                    <p data-translate-key="about_skill_3">تصميم برمجيات وسطح المكتب وتطبيقات الهواتف الذكية (ZG ZEZO APPS، ZG OS، ZG FILM CRAFT وغيرها).</p>
+                </div>
+                
+                <div class="info-section">
+                    <h5 data-translate-key="about_experience_title">أبرز الأعمال</h5>
+                    <p data-translate-key="about_exp_1">العمل مع شركة الدار العربي السعودية (19/5/2019).</p>
+                    <p data-translate-key="about_exp_2">المشاركة في مشروع القرآن العظيم وتطوير برامج للأندرويد والآيفون.</p>
+                    <p data-translate-key="about_exp_3">تصميم وتطوير مشاريع GAMES 2EGYPT.</p>
+                    <p data-translate-key="about_exp_5">أحد المشاركين في مبادرات ومشاريع Huawei التقنية.</p>
+                </div>
+
+                <div class="info-section">
+                    <h5 data-translate-key="about_certs_title">الشهادات المعتمدة</h5>
+                    <div class="certs-grid">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjgh5WE5xJh7aRQHuoowFnN9XRDm0JTX2OE0qmB27B4DsScJAAw4HNFJWKfF-FLFcoFaNBX9BP6K8OdGv25ADXYTVzI5Z1W5NwXOItflBeIxHYZJ9otUJDGgzxEl8DoNhyK5-VGqgNyN4oVg4tg3oe0Fd7xQau67us8Rg9E8wreaN7csWJHMmXLJWdZJ3sx/w252-h252/university-of-oxford-badge-logo.png" alt="Oxford">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioC4aVpzDV0C9WMQk7yiqT75FsA61aj-OiGFrPOgNlEwlNBQl9o5pwLTpuP1MkAPDKxPMphhlXB2g46Ddw3z0IjwBxBsAHlvwCWJkl1wUIzSz9pqjmJ_xrjJEIfnR0yhtlvF7a2Ya7Yx-s_p-d9VDpwxtcy2fxE7p3FNq7eCejabIDEFKv5enHhCMkvQg/w179-h179/amazon-1331550885972433276.png" alt="Amazon">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj3ekp13xqwuXwELEvGxtaFbxdX_E6CNmG2zdElPyqTxtn3HaG-bBNVH8vfvr9Me9AMp1G3OOgfu8iFPws3_qG0j2Zo_SJYpSalIflVaL_cXF3XnVgIXpbSfMrqlvpKtgBDacAJD_5Ng8jg7k9JtogS3BkcirIgBZO0TdvzLWvL7f41zqNXoBKrIdIgX7o/s1600/free-microsoft-1868944-1583108.webp" alt="Microsoft">
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h5 data-translate-key="about_contact_title">للتواصل والأعمال</h5>
+                    <p><strong>البريد الإلكتروني:</strong> zgzezoapps@gmail.com</p>
+                    <div class="social-card">
+                        <div class="socialbar">
+                            <a id="facebook" href="https://www.facebook.com/ziad.ziad.75641" target="_blank"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"></path></svg></a>
+                            <a id="instagram" href="https://www.instagram.com/zg_ziad_gamal/" target="_blank"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path></svg></a>
+                            <a id="whatsapp" href="https://api.whatsapp.com/send/?phone=201202377778" target="_blank"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.05-.084-.182-.133-.38-.232z"></path></svg></a>
+                            <a id="telegram" href="https://t.me/ZG_ZIAD" target="_blank"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"></path></svg></a>
+                            <a id="youtube" href="https://www.youtube.com/channel/UCr9pR-04MZEr96VteNBlQ" target="_blank"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"></path></svg></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn" data-translate-key="close">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SERVICES -->
+    <div id="services-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-translate-key="services_modal_title">خدمات ZG الرقمية</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="services-list">
+                    <a href="https://www.zg-ziad-gamal.com/p/zgpt.html" target="_blank" rel="noopener noreferrer" class="service-link">
+                        <i class="fas fa-brain"></i>
+                        <span>ZGPT - الذكاء الاصطناعي</span>
+                    </a>
+                    <a href="https://www.zg-ziad-gamal.com/p/zg-doc.html" target="_blank" rel="noopener noreferrer" class="service-link">
+                        <i class="fas fa-file-word"></i>
+                        <span>ZG DOC - معالج المستندات</span>
+                    </a>
+                    <a href="https://www.zg-ziad-gamal.com/p/zg-slide.html" target="_blank" rel="noopener noreferrer" class="service-link">
+                        <i class="fas fa-file-powerpoint"></i>
+                        <span>ZG SLIDE - العروض التقديمية</span>
+                    </a>
+                    <a href="https://www.zg-ziad-gamal.com/p/zg-code.html" target="_blank" rel="noopener noreferrer" class="service-link">
+                        <i class="fas fa-file-code"></i>
+                        <span>ZG CODE - بيئة البرمجة الذكية</span>
+                    </a>
+                    <a href="https://www.zg-ziad-gamal.com/p/zg-converter.html" target="_blank" rel="noopener noreferrer" class="service-link">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>ZG CONVERTER - محول الملفات</span>
+                    </a>
+                    <a href="https://www.zg-ziad-gamal.com/p/zg-studio-root-primary-color-007bff_20.html" target="_blank" rel="noopener noreferrer" class="service-link">
+                        <i class="fas fa-camera-retro"></i>
+                        <span>ZG PHOTO - تحرير الصور</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PRIVACY POLICY -->
+    <div id="privacy-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-translate-key="privacy_modal_title">سياسة الخصوصية</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div id="privacy-modal-body" class="modal-body" data-translate-key="privacy_policy_content"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn" data-translate-key="close">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SETTINGS -->
+    <div id="settings-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-translate-key="settings_title">الإعدادات وتخصيص المظهر</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h4 data-translate-key="settings_primary_color_title">اللون الأساسي</h4>
+                    <div class="setting-item">
+                        <label data-translate-key="settings_primary_color_label">اللون الرئيسي للواجهة</label>
+                        <input type="color" id="primary-color-picker">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4 data-translate-key="settings_background_title">ألوان الخلفية المتدرجة</h4>
+                    <div class="setting-item">
+                        <label data-translate-key="settings_light_start">لون البداية (الوضع الفاتح)</label>
+                        <input type="color" id="light-start-color-picker">
+                    </div>
+                    <div class="setting-item">
+                        <label data-translate-key="settings_light_end">لون النهاية (الوضع الفاتح)</label>
+                        <input type="color" id="light-end-color-picker">
+                    </div>
+                    <hr style="border: 1px solid var(--glass-border); margin: 15px 0;">
+                    <div class="setting-item">
+                        <label data-translate-key="settings_dark_start">لون البداية (الوضع الداكن)</label>
+                        <input type="color" id="dark-start-color-picker">
+                    </div>
+                    <div class="setting-item">
+                        <label data-translate-key="settings_dark_end">لون النهاية (الوضع الداكن)</label>
+                        <input type="color" id="dark-end-color-picker">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4 data-translate-key="settings_animation_title">الحركة والمؤثرات</h4>
+                    <div class="setting-item">
+                        <label data-translate-key="settings_toggle_animation">تفعيل الخلفية الحية المتحركة</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="animation-toggle-switch" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h4 data-translate-key="settings_reset_title">إعادة الضبط</h4>
+                    <div class="setting-item">
+                        <p data-translate-key="settings_reset_desc" style="font-size: 0.9em; opacity: 0.85;">استعادة الألوان والإعدادات الافتراضية للواجهة بالكامل.</p>
+                        <button id="reset-settings-btn" class="btn btn-danger" data-translate-key="settings_reset_button">إعادة ضبط</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: IMAGE LIGHTBOX -->
+    <div id="image-modal-overlay" class="modal-overlay">
+        <div class="image-modal-content">
+            <button id="image-modal-close-btn" class="modal-close-btn">&times;</button>
+            <img id="modal-image" src="" alt="Full view screenshot">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const htmlTag = document.documentElement;
+            const body = document.body;
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const langButtons = { ar: document.getElementById('lang-ar'), en: document.getElementById('lang-en'), zh: document.getElementById('lang-zh') };
+
+            const servicesToggleBtn = document.getElementById('services-toggle-btn');
+            const aboutToggleBtn = document.getElementById('about-toggle-btn');
+            const privacyToggleBtn = document.getElementById('privacy-toggle-btn');
+            const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+            
+            const servicesModal = document.getElementById('services-modal-overlay');
+            const aboutModal = document.getElementById('about-modal-overlay');
+            const privacyModal = document.getElementById('privacy-modal-overlay');
+            const settingsModal = document.getElementById('settings-modal-overlay');
+            const imageModal = document.getElementById('image-modal-overlay');
+            const modalImage = document.getElementById('modal-image');
+            const modalCloseBtns = document.querySelectorAll('.modal-close-btn');
+
+            const primaryColorPicker = document.getElementById('primary-color-picker');
+            const lightStartColorPicker = document.getElementById('light-start-color-picker');
+            const lightEndColorPicker = document.getElementById('light-end-color-picker');
+            const darkStartColorPicker = document.getElementById('dark-start-color-picker');
+            const darkEndColorPicker = document.getElementById('dark-end-color-picker');
+            const animationToggle = document.getElementById('animation-toggle-switch');
+            const resetSettingsBtn = document.getElementById('reset-settings-btn');
+
+            const galleryItems = document.querySelectorAll('.gallery-item img');
+
+            // TRANSLATIONS
+            const translations = {
+                ar: {
+                    pageTitle: "ZG FILM CRAFT - المونتاج السينمائي الاحترافي",
+                    appName: "ZG FILM CRAFT",
+                    shortDescription: "برنامج المونتاج وتحرير الفيديو السينمائي الفائق. استمتع بأقوى شاشات العرض المزدوجة، تايم لاين حقيقي متعدد المسارات، كافة أدوات القص والتعديل الديناميكي، ومحرك تصحيح ألوان احترافي مبني بالكامل بأحدث تقنيات المعالجة دون أي تسريب للذاكرة.",
+                    badge_note: "أداء فائق واستقرار مطلق مع معالجة رسومية مباشرة على كارت الشاشة (GPU Live Pipeline).",
+                    btn_win: "تحميل للويندوز (MSI - 64bit)",
+                    btn_mac: "تحميل للماك (Universal DMG)",
+                    btn_linux: "تحميل للينكس (AppImage)",
+                    btn_deb: "حزمة دبيان (.deb)",
+                    screenshotsTitle: "لقطات الشاشة الرسمية",
+                    cap_1: "واجهة المونتاج والتايم لاين متعدد المسارات",
+                    cap_2: "مخططات الإشارة الحية والتدريج اللوني السينمائي (Scopes)",
+                    cap_3: "محرر المنحنيات ومخطط السرعة للإطارات المفتاحية",
+                    cap_4: "محرك التصدير وضبط الإعدادات الاحترافية المسبقة",
+                    descriptionTitle: "المواصفات والإمكانيات التقنية",
+                    feat_1_title: "تايم لاين سينمائي معتاد",
+                    feat_1_desc: "شاشات مراقبة المصدر والبرنامج، تحرير ثلاثي النقاط (3-Point Editing)، دعم كامل لجميع أوضاع القص (Ripple, Roll, Slip, Slide) واختصارات J/K/L الديناميكية السلسة.",
+                    feat_2_title: "توقيت رياضي فائق الدقة",
+                    feat_2_desc: "نظام زمني مبني على دقة 2.54×10⁸ هرتز، مما يضمن دقة الفريمات لسرعات 23.976 و 29.97 مع تجنب انزياح الصوت أو فقدان الفريمات حتى في المشاريع الضخمة.",
+                    feat_3_title: "محرك كوديك مخصص",
+                    feat_3_desc: "معالجة برمجية أصلية لفك وتشفير H.264 و HEVC و Apple ProRes و VP9 و AAC و Opus بالاعتماد التام على العتاد المسرع وكروت الشاشة.",
+                    feat_4_title: "تدريج لوني ومخططات 60 FPS",
+                    feat_4_desc: "منحنيات الألوان RGB، عجلات التلوين (Lift, Gamma, Gain)، تدريج HSL، دعم كامل لملفات 3D LUT ومسارات HDR & Log، مع مخططات Waveform و Vectorscope لحظية.",
+                    feat_5_title: "مؤثرات ومنحنيات حركة",
+                    feat_5_desc: "أكثر من 55 تأثيراً و30 انتقالاً سلساً، مع محرر إطارات مفتاحية يتيح التحكم في منحنيات القيمة والسرعة (Value & Velocity Graphs) في بيئة ضوئية خطية Linear Light.",
+                    feat_6_title: "هندسة صوت للبث التلفزيوني",
+                    feat_6_desc: "مقياس متوافق مع معايير البث العالمية EBU R128، ماكسر صوتي مدمج يدعم الأتمتة (Automation)، ومؤثرات DSP صوتية فورية فائقة النقاء.",
+                    th_feature: "الميزة والمواصفة",
+                    th_zg: "ZG FILM CRAFT",
+                    th_legacy: "البرامج التقليدية الأخرى",
+                    td_stability: "استقرار الذاكرة وسلاسة التشغيل",
+                    td_stability_zg: "إدارة ذاكرة صارمة، بدون أي تسريب (Zero Memory Leaks)",
+                    td_stability_leg: "انهيارات متكررة عند استهلاك الرام مع جودات 4K/8K",
+                    td_scopes: "سرعة المخططات التلوينية (Scopes)",
+                    td_scopes_zg: "معالجة حية 60 FPS عبر الـ GPU بدون هبوط في الإطارات",
+                    td_scopes_leg: "هبوط ملحوظ في الفريمات وثقل أثناء التشغيل",
+                    td_codecs: "دعم الكوديك والتسريع العتادي",
+                    td_codecs_zg: "دعم عتادي مدمج فوري (ProRes, H.264, HEVC, AV1)",
+                    td_codecs_leg: "حزم خارجية وإضافات مكلفة ومدفوعة",
+                    td_license: "التكلفة والترخيص",
+                    td_license_zg: "مجاني تماماً وحصري عبر منصة ZG SERVER",
+                    td_license_leg: "اشتراكات شهرية باهظة ومكلفة",
+                    powered_by: "يعمل بواسطة خوادم ZG SERVER",
+                    about_modal_title: "حول المطور",
+                    about_name: "زياد جمال شوقي محمد محمد يوسف",
+                    about_dob: "تاريخ الميلاد: 23/1/2003",
+                    about_skills_title: "القدرات والخبرات البرمجية",
+                    about_skill_1: "إنشاء وتطوير مواقع الويب المتقدمة والأنظمة السحابية.",
+                    about_skill_2: "إنتاج فيديوهات موشن جرافيك احترافية مع تعليق صوتي بلهجات متعددة.",
+                    about_skill_3: "تصميم برمجيات وسطح المكتب وتطبيقات الهواتف الذكية (ZG ZEZO APPS، ZG OS، ZG FILM CRAFT وغيرها).",
+                    about_experience_title: "أبرز الأعمال",
+                    about_exp_1: "العمل مع شركة الدار العربي السعودية (19/5/2019).",
+                    about_exp_2: "المشاركة في مشروع القرآن العظيم وتطوير برامج للأندرويد والآيفون.",
+                    about_exp_3: "تصميم وتطوير مشاريع GAMES 2EGYPT.",
+                    about_exp_5: "أحد المشاركين في مبادرات ومشاريع Huawei التقنية.",
+                    about_certs_title: "الشهادات المعتمدة",
+                    about_contact_title: "للتواصل والأعمال",
+                    close: "إغلاق",
+                    services_modal_title: "خدمات ZG الرقمية",
+                    privacy_modal_title: "سياسة الخصوصية",
+                    privacy_policy_content: `
+                        <p>في ZG STORE و ZG FILM CRAFT، نلتزم تماماً بحماية خصوصية مستخدمينا وزوارنا.</p>
+                        <h3>1. جمع البيانات</h3>
+                        <p>لا نقوم بجمع أو تخزين أي بيانات شخصية أو معلومات تعريفية خاصة بالمستخدمين. كل الإعدادات والتفضيلات محفوظة محلياً على جهازك الشخصي.</p>
+                        <h3>2. التخزين المحلي</h3>
+                        <p>يستخدم الموقع التخزين المحلي (Local Storage) لحفظ تفضيلات اللغة والمظهر والألوان الخاصة بك فقط، دون إرسالها إلى أي خوادم خارجية.</p>
+                        <h3>3. أمان وحماية المحتوى</h3>
+                        <p>أعمالك ومقاطع الفيديو ومشاريع المونتاج التي تقوم بمعالجتها عبر البرنامج تظل بالكامل على جهازك وتخضع لسيادتك الرقمية المطلقة.</p>
+                    `,
+                    settings_title: "الإعدادات وتخصيص المظهر",
+                    settings_primary_color_title: "اللون الأساسي",
+                    settings_primary_color_label: "اللون الرئيسي للواجهة",
+                    settings_background_title: "ألوان الخلفية المتدرجة",
+                    settings_light_start: "لون البداية (الوضع الفاتح)",
+                    settings_light_end: "لون النهاية (الوضع الفاتح)",
+                    settings_dark_start: "لون البداية (الوضع الداكن)",
+                    settings_dark_end: "لون النهاية (الوضع الداكن)",
+                    settings_animation_title: "الحركة والمؤثرات",
+                    settings_toggle_animation: "تفعيل الخلفية الحية المتحركة",
+                    settings_reset_title: "إعادة الضبط",
+                    settings_reset_desc: "استعادة الألوان والإعدادات الافتراضية للواجهة بالكامل.",
+                    settings_reset_button: "إعادة ضبط"
+                },
+                en: {
+                    pageTitle: "ZG FILM CRAFT - Professional Video Editing",
+                    appName: "ZG FILM CRAFT",
+                    shortDescription: "Cinema-grade non-linear video editing suite. Source and program monitors, a real multitrack timeline, every trim mode, and broadcast color grading built with modern GPU acceleration and zero memory leaks.",
+                    badge_note: "Maximum stability with zero memory leaks and native GPU Live Pipeline rendering.",
+                    btn_win: "Download for Windows (MSI - 64bit)",
+                    btn_mac: "Download for macOS (Universal DMG)",
+                    btn_linux: "Download for Linux (AppImage)",
+                    btn_deb: "Debian Package (.deb)",
+                    screenshotsTitle: "Official Screenshots",
+                    cap_1: "Multitrack Timeline & Dual-Monitor Workspace",
+                    cap_2: "Real-time 60 FPS Scopes & Cinema Color Grading",
+                    cap_3: "Interactive Curve Keyframing & Velocity Graphs",
+                    cap_4: "Export Engine with Destination Mastering Presets",
+                    descriptionTitle: "Technical Specifications & Capabilities",
+                    feat_1_title: "A Timeline You Already Know",
+                    feat_1_desc: "Source and program monitors, 3-point editing, every trim mode (Ripple, Roll, Slip, Slide), and dynamic J/K/L playback trimming.",
+                    feat_2_title: "Frame-Exact Integer Timebase",
+                    feat_2_desc: "An exact 2.54×10⁸ Hz integer timebase keeps 23.976 and 29.97 drop-frame precision with zero drift and zero rounding errors.",
+                    feat_3_title: "Dedicated Codec Architecture",
+                    feat_3_desc: "Native decoding and encoding for H.264, HEVC, Apple ProRes, AV1, VP9, AAC, and Opus with full hardware acceleration.",
+                    feat_4_title: "60 FPS Scopes & Lumetri Grading",
+                    feat_4_desc: "RGB Curves, color wheels (Lift, Gamma, Gain), HSL secondaries, 3D LUTs, HDR and Log workflows, with GPU-accelerated video scopes.",
+                    feat_5_title: "Linear-Light Effects & Keyframes",
+                    feat_5_desc: "Over 55 video effects and 30 seamless transitions, featuring interactive Bezier value and velocity graph editing in 32-bit linear light.",
+                    feat_6_title: "Broadcast-Ready Audio Engine",
+                    feat_6_desc: "EBU R128 loudness compliance metering, automated multichannel mixer, and pristine low-latency native DSP audio effects.",
+                    th_feature: "Feature & Specification",
+                    th_zg: "ZG FILM CRAFT",
+                    th_legacy: "Legacy Video Editors",
+                    td_stability: "Memory Stability & Performance",
+                    td_stability_zg: "Deterministic memory model with Zero Memory Leaks",
+                    td_stability_leg: "Frequent out-of-memory crashes on 4K/8K timelines",
+                    td_scopes: "Color Scopes Latency",
+                    td_scopes_zg: "Live 60 FPS GPU compute shader without frame drops",
+                    td_scopes_leg: "Heavy UI thread stutter and delayed timeline playback",
+                    td_codecs: "Codec & Hardware Acceleration",
+                    td_codecs_zg: "Built-in hardware acceleration for ProRes, AV1, HEVC",
+                    td_codecs_leg: "Costly third-party plugin and codec purchases",
+                    td_license: "Pricing & Licensing",
+                    td_license_zg: "100% Free powered by ZG SERVER",
+                    td_license_leg: "Expensive recurring monthly subscriptions",
+                    powered_by: "Powered by ZG SERVER",
+                    about_modal_title: "About the Developer",
+                    about_name: "Ziad Gamal Shawky Muhammad Muhammad Yusuf",
+                    about_dob: "Date of Birth: 23/1/2003",
+                    about_skills_title: "Abilities & Expertise",
+                    about_skill_1: "Advanced web design, cloud systems, and platform development.",
+                    about_skill_2: "Motion graphics video production with multilingual voice-overs.",
+                    about_skill_3: "Designing Android and desktop applications (ZG ZEZO APPS, ZG OS, ZG FILM CRAFT, etc.).",
+                    about_experience_title: "Key Works",
+                    about_exp_1: "Worked with Al Dar Al Arabi Saudi Company (19/5/2019).",
+                    about_exp_2: "Contributor to the Great Quran Project for Android & iOS.",
+                    about_exp_3: "Designed and developed graphics for GAMES 2EGYPT.",
+                    about_exp_5: "Participant in Huawei developer and engineering initiatives.",
+                    about_certs_title: "Certifications",
+                    about_contact_title: "Contact & Business",
+                    close: "Close",
+                    services_modal_title: "ZG Digital Services",
+                    privacy_modal_title: "Privacy Policy",
+                    privacy_policy_content: `
+                        <p>At ZG STORE and ZG FILM CRAFT, we are committed to safeguarding user privacy.</p>
+                        <h3>1. Data Collection</h3>
+                        <p>We do not collect or store any personally identifiable information (PII). All user preferences are stored locally on your device.</p>
+                        <h3>2. Local Storage</h3>
+                        <p>Local Storage is used exclusively to remember your selected theme, language, and interface color preferences.</p>
+                        <h3>3. Complete Digital Sovereignty</h3>
+                        <p>Your video projects, edits, and assets remain 100% on your local machine and are never transmitted to external servers.</p>
+                    `,
+                    settings_title: "Appearance & Settings",
+                    settings_primary_color_title: "Primary Color",
+                    settings_primary_color_label: "Main Accent Color",
+                    settings_background_title: "Background Gradients",
+                    settings_light_start: "Start Color (Light Mode)",
+                    settings_light_end: "End Color (Light Mode)",
+                    settings_dark_start: "Start Color (Dark Mode)",
+                    settings_dark_end: "End Color (Dark Mode)",
+                    settings_animation_title: "Animation Control",
+                    settings_toggle_animation: "Enable Live Gradient Animation",
+                    settings_reset_title: "Reset Settings",
+                    settings_reset_desc: "Restore default theme, colors, and layout preferences.",
+                    settings_reset_button: "Reset All"
+                },
+                zh: {
+                    pageTitle: "ZG FILM CRAFT - 专业电影级视频剪辑",
+                    appName: "ZG FILM CRAFT",
+                    shortDescription: "专业级非线性电影视频剪辑套件。配备双源程序监视器、真实多轨时间轴、全功能修剪模式，以及基于现代 GPU 硬件加速和零内存泄漏构建的广播级调色引擎。",
+                    badge_note: "极致稳定性，零内存泄漏，原生 GPU 实时渲染管线加速。",
+                    btn_win: "下载 Windows 版 (MSI - 64位)",
+                    btn_mac: "下载 macOS 版 (Universal DMG)",
+                    btn_linux: "下载 Linux 版 (AppImage)",
+                    btn_deb: "Debian 软件包 (.deb)",
+                    screenshotsTitle: "官方屏幕截图",
+                    cap_1: "多轨时间轴与双监视器剪辑工作区",
+                    cap_2: "实时 60 FPS 视频示波器与电影级调色",
+                    cap_3: "交互式关键帧贝塞尔曲线与速度图表",
+                    cap_4: "带有多平台输出预设的专业导出引擎",
+                    descriptionTitle: "技术规格与核心能力",
+                    feat_1_title: "熟悉的专业时间轴",
+                    feat_1_desc: "源监视器与节目监视器、三点剪辑、所有修剪模式（波纹、滚动、滑动、滑移）以及流畅的 J/K/L 动态穿梭修剪。",
+                    feat_2_title: "帧精确的整数字基时间轴",
+                    feat_2_desc: "2.54×10⁸ Hz 高精整数字基，确保 23.976 与 29.97 丢帧精确同步，杜绝音频漂移与帧丢失问题。",
+                    feat_3_title: "原生自主编解码架构",
+                    feat_3_desc: "原生支持 H.264、HEVC、Apple ProRes、AV1、VP9、AAC 和 Opus，完全基于 GPU 硬件加速解码与编码。",
+                    feat_4_title: "60 FPS 示波器与专业调色",
+                    feat_4_desc: "RGB 曲线、调色三相轮（Lift, Gamma, Gain）、HSL 二级调色、3D LUT 支持，以及支持 HDR 和 Log 工作流的实时 GPU 示波器。",
+                    feat_5_title: "线性光特效与曲线关键帧",
+                    feat_5_desc: "超过 55 种视频特效与 30 种平滑转场，提供 32 位浮点线性光环境下的数值与速度曲线关键帧编辑。",
+                    feat_6_title: "广播级音频工程",
+                    feat_6_desc: "符合 EBU R128 国际广播响度规范，集成带自动化的多声道混音器及超纯净的原生 DSP 音频效果器。",
+                    th_feature: "特性与规格",
+                    th_zg: "ZG FILM CRAFT",
+                    th_legacy: "传统视频剪辑软件",
+                    td_stability: "内存稳定性与运行表现",
+                    td_stability_zg: "确定性内存模型，零内存泄漏 (Zero Memory Leaks)",
+                    td_stability_leg: "在 4K/8K 复杂时间轴上频繁出现内存不足崩溃",
+                    td_scopes: "调色示波器延迟",
+                    td_scopes_zg: "GPU 计算着色器 60 FPS 实时渲染，绝无丢帧",
+                    td_scopes_leg: "主线程卡顿，时间轴回放出现显著延迟",
+                    td_codecs: "编解码器与硬件加速",
+                    td_codecs_zg: "原生集成 ProRes、AV1、HEVC 硬件解码支持",
+                    td_codecs_leg: "需购买昂贵的第三方插件或授权",
+                    td_license: "价格与许可模式",
+                    td_license_zg: "由 ZG SERVER 提供支持，永久免费",
+                    td_license_leg: "昂贵的按月或按年订阅费用",
+                    powered_by: "由 ZG SERVER 提供支持",
+                    about_modal_title: "关于开发者",
+                    about_name: "齐亚德·贾马尔·肖基·穆罕默德·优素福",
+                    about_dob: "出生日期：2003年1月23日",
+                    about_skills_title: "专业能力与技术储备",
+                    about_skill_1: "先进网页设计、云端系统及大型综合平台架构研发。",
+                    about_skill_2: "制作带有多种语言配音的高水准动画和动态图形设计。",
+                    about_skill_3: "开发 Android 及桌面端程序（ZG ZEZO APPS、ZG OS、ZG FILM CRAFT 等）。",
+                    about_experience_title: "主要经历与履历",
+                    about_exp_1: "与沙特阿拉伯 Al Dar Al Arabi 合作开发（2019年5月19日）。",
+                    about_exp_2: "参与“古兰经”重点软件项目，研发 Android 与 iOS 端应用。",
+                    about_exp_3: "为 GAMES 2EGYPT 设计与开发视觉与程序项目。",
+                    about_exp_5: "华为开发者生态项目贡献者与参与者。",
+                    about_certs_title: "专业资质与认证",
+                    about_contact_title: "商业合作与联系",
+                    close: "关闭",
+                    services_modal_title: "ZG 数字化服务生态",
+                    privacy_modal_title: "隐私政策",
+                    privacy_policy_content: `
+                        <p>在 ZG STORE 与 ZG FILM CRAFT，我们严格守护每位用户的数字隐私安全。</p>
+                        <h3>1. 数据收集</h3>
+                        <p>我们不会收集、存储或传输任何个人身份信息 (PII)。所有用户偏好均保存在您的本地计算机上。</p>
+                        <h3>2. 本地存储</h3>
+                        <p>本地存储 (Local Storage) 仅用于记录您选择的主题、语言及界面调色配置。</p>
+                        <h3>3. 完整的数字主权</h3>
+                        <p>您的所有视频源素材、剪辑工程文件和导出数据完全保留在本地，永不上传到外部服务器。</p>
+                    `,
+                    settings_title: "外观与偏好设置",
+                    settings_primary_color_title: "主色调设置",
+                    settings_primary_color_label: "界面主强调色",
+                    settings_background_title: "动态渐变背景",
+                    settings_light_start: "起始颜色（浅色模式）",
+                    settings_light_end: "结束颜色（浅色模式）",
+                    settings_dark_start: "起始颜色（深色模式）",
+                    settings_dark_end: "结束颜色（深色模式）",
+                    settings_animation_title: "动画效果控制",
+                    settings_toggle_animation: "启用平滑渐变动态背景",
+                    settings_reset_title: "重置所有设置",
+                    settings_reset_desc: "恢复默认界面色彩、语言和样式配置。",
+                    settings_reset_button: "重置全部"
+                }
+            };
+
+            // THEME & COLORS
+            const defaultColors = {
+                primary: '#00AFFF',
+                light: { start: '#89f7fe', end: '#66a6ff' },
+                dark: { start: '#1a1c20', end: '#2d3436' }
+            };
+
+            function applyCustomColors() {
+                const isDark = body.classList.contains('dark-mode');
+                const themeKey = isDark ? 'dark' : 'light';
+                const startColor = localStorage.getItem(`bg-${themeKey}-start`) || defaultColors[themeKey].start;
+                const endColor = localStorage.getItem(`bg-${themeKey}-end`) || defaultColors[themeKey].end;
+                document.documentElement.style.setProperty('--bg-gradient-start', startColor);
+                document.documentElement.style.setProperty('--bg-gradient-end', endColor);
+            }
+
+            function applyPrimaryColor() {
+                const color = localStorage.getItem('primary-color') || defaultColors.primary;
+                document.documentElement.style.setProperty('--primary-color', color);
+            }
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                } else {
+                    body.classList.remove('dark-mode');
+                }
+                localStorage.setItem('theme', theme);
+                applyCustomColors();
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                const nextTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
+                applyTheme(nextTheme);
+            });
+
+            // LANGUAGE SWITCHER
+            function changeLanguage(lang) {
+                if (!translations[lang]) return;
+                htmlTag.lang = lang;
+                htmlTag.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+                document.querySelectorAll('[data-translate-key]').forEach(el => {
+                    const key = el.getAttribute('data-translate-key');
+                    if (translations[lang][key]) {
+                        if (key.includes('privacy_policy_content')) {
+                            el.innerHTML = translations[lang][key];
+                        } else {
+                            el.innerText = translations[lang][key];
+                        }
+                    }
+                });
+
+                document.title = translations[lang].pageTitle || "ZG FILM CRAFT";
+                Object.values(langButtons).forEach(btn => btn.classList.remove('active'));
+                langButtons[lang].classList.add('active');
+                localStorage.setItem('language', lang);
+            }
+
+            Object.keys(langButtons).forEach(lang => {
+                langButtons[lang].addEventListener('click', () => changeLanguage(lang));
+            });
+
+            // MODALS
+            const openModal = (m) => { m.style.display = 'flex'; };
+            const closeModal = (m) => { m.style.display = 'none'; };
+
+            servicesToggleBtn.addEventListener('click', () => openModal(servicesModal));
+            aboutToggleBtn.addEventListener('click', () => openModal(aboutModal));
+            privacyToggleBtn.addEventListener('click', () => openModal(privacyModal));
+            settingsToggleBtn.addEventListener('click', () => openModal(settingsModal));
+
+            modalCloseBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => closeModal(e.target.closest('.modal-overlay')));
+            });
+
+            galleryItems.forEach(img => {
+                img.addEventListener('click', () => {
+                    modalImage.src = img.src;
+                    openModal(imageModal);
+                });
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay')) closeModal(e.target);
+            });
+
+            // SETTINGS CONTROLS
+            primaryColorPicker.addEventListener('input', (e) => {
+                localStorage.setItem('primary-color', e.target.value);
+                applyPrimaryColor();
+            });
+
+            lightStartColorPicker.addEventListener('input', (e) => {
+                localStorage.setItem('bg-light-start', e.target.value);
+                applyCustomColors();
+            });
+            lightEndColorPicker.addEventListener('input', (e) => {
+                localStorage.setItem('bg-light-end', e.target.value);
+                applyCustomColors();
+            });
+            darkStartColorPicker.addEventListener('input', (e) => {
+                localStorage.setItem('bg-dark-start', e.target.value);
+                applyCustomColors();
+            });
+            darkEndColorPicker.addEventListener('input', (e) => {
+                localStorage.setItem('bg-dark-end', e.target.value);
+                applyCustomColors();
+            });
+
+            animationToggle.addEventListener('change', (e) => {
+                localStorage.setItem('animationEnabled', e.target.checked);
+                if (e.target.checked) {
+                    body.classList.remove('animation-disabled');
+                } else {
+                    body.classList.add('animation-disabled');
+                }
+            });
+
+            resetSettingsBtn.addEventListener('click', () => {
+                const lang = localStorage.getItem('language') || 'ar';
+                const msg = (lang === 'ar') ? 'هل تريد استعادة الإعدادات الافتراضية؟' : (lang === 'zh' ? '您确定要恢复默认设置吗？' : 'Are you sure you want to reset settings?');
+                if (confirm(msg)) {
+                    localStorage.clear();
+                    window.location.reload();
+                }
+            });
+
+            // LOAD INITIAL SETTINGS
+            function initSettings() {
+                const savedLang = localStorage.getItem('language') || 'ar';
+                changeLanguage(savedLang);
+
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                applyTheme(savedTheme);
+
+                const savedPrimary = localStorage.getItem('primary-color') || defaultColors.primary;
+                primaryColorPicker.value = savedPrimary;
+                applyPrimaryColor();
+
+                lightStartColorPicker.value = localStorage.getItem('bg-light-start') || defaultColors.light.start;
+                lightEndColorPicker.value = localStorage.getItem('bg-light-end') || defaultColors.light.end;
+                darkStartColorPicker.value = localStorage.getItem('bg-dark-start') || defaultColors.dark.start;
+                darkEndColorPicker.value = localStorage.getItem('bg-dark-end') || defaultColors.dark.end;
+                applyCustomColors();
+
+                const anim = localStorage.getItem('animationEnabled') !== 'false';
+                animationToggle.checked = anim;
+                if (!anim) body.classList.add('animation-disabled');
+            }
+
+            initSettings();
+        });
+    </script>
+</body>
+</html>
